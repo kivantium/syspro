@@ -1,0 +1,13 @@
+main.cはランダムな値を100回putするスレッド、先頭の値を1000回getするスレッドを100個ずつつくり、putした順番にgetできることを確認するプログラムになっている。
+
+実行するには
+gcc main.c -pthread
+./a.out > put.txt 2> get.txt
+sort put.txt -n -o put.txt
+sort get.txt -n -o get.txt
+diff put.txt get.txt
+として何も表示されないことを確認すればよい。
+
+標準出力には"putした順番 : putした数字"
+標準エラー出力には"getした順番 : getした数字"
+がそれぞれ出力されるようになっているのでsortした結果が同じであれば正しく動作していることが確認できる。

@@ -1,0 +1,17 @@
+・GET, HEADリクエストに対応するhttpサーバーを作成した。
+・それ以外のリクエストに対してはエラーを返すようにした
+・非常に長いリクエスト行や相対パスで親ディレクトリを指すリクエストが来た場合もエラーを返すようにしてセキュリティリスクを減らした
+・Ubuntu上のGoogle Chromeで動作を確認した
+• Apache Benchmarkに耐えられることを確認した
+$ ab -c 5 -n 100 http://localhost:8080/index.html の結果
+Concurrency Level:      5
+Time taken for tests:   0.022 seconds
+Complete requests:      100
+Failed requests:        0
+Total transferred:      12000 bytes
+HTML transferred:       8300 bytes
+Requests per second:    4530.42 [#/sec] (mean)
+Time per request:       1.104 [ms] (mean)
+Time per request:       0.221 [ms] (mean, across all concurrent requests)
+Transfer rate:          530.91 [Kbytes/sec] received
+となり、全てのリクエストがcompleteになっている。

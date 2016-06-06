@@ -1,0 +1,16 @@
+straceでpthreadが呼んでいるシステムコールを調べたところcloneというシステムコールを使っていることが分かった。
+
+main.cのような書き方をすればスレッドを呼び出して講義スライドの「スレッドの作成・終了の例」にあるようなプログラム(test.c)と同じような処理を行うことができた。
+
+疑問点
+見た目としては同じ処理を行っているがコメントアウトした行にあるような処理を行ってプロセスIDを調べたところ、自作のスレッド作成プログラムでは呼ばれた関数のpidがmain関数と異なるものになってしまっており、pthreadによるものとは違う挙動を示している。
+
+pthreadを使う場合のcloneのflagsはCLONE_VM|CLONE_FS|CLONE_FILES|CLONE_SIGHAND|CLONE_THREAD|CLONE_SYSVSEM|CLONE_SETTLS|CLONE_PARENT_SETTID|CLONE_CHILD_CLEARTIDとなっていた。しかし、これをそのまま自作のプログラムのflagにするとSegmentation Faultのエラーが起こり、スレッドと関係がありそうなCLONE_THREAD|CLONE_SIGHAND|CLONE_VMに限定しても
+error in waitpid(): No child processes
+thread: arg = 1
+という出力になりwaitpidに失敗する状態になってしまった。
+
+man cloneのCLONE_THREADの記述を読むと"When a CLONE_THREAD  thread  terminates,  the  thread that  created  it using clone() is not sent a SIGCHLD (or other termination) signal; nor can the status of such a thread be obtained using wait(2)"と書いてあったのでスレッドの終了を何か別の方法で待たないといけないようなのだが、調べても分からなかったのでこれ以上の改良は断念した。
+
+何か良い方法があるなら教えていただきたいです。
+

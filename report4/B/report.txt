@@ -1,0 +1,6 @@
+tcpechoserver1.cは複数スレッドを用いるTCP echoサーバーのコード
+tcpechoserver2.cはselectを用いるTCP echoサーバーのコード
+client.cはechoサーバーに標準入力を送信して受信したデータを表示するコード
+
+参考文献
+selectの使い方はhttps://gist.github.com/silv3rm00n/5604330 のコードをとても参考にした

@@ -1,0 +1,14 @@
+gcc -O0 main.cとしてコンパイルしたところ以下の実行結果を得た。
+1 time: 8
+1000 times: 16
+
+getpid()を1度呼び出す時間の2倍の時間で1000回の実行が可能であることが分かる。
+
+man 2 getpidによれば、
+"Since glibc version 2.3.4, the glibc wrapper function for getpid() caches PIDs, so as to avoid additional system calls when a process calls getpid() repeatedly."
+とあるので2回目以降のgetpid()の実行ではシステムコールを呼ばずにキャッシュした結果を返しているため高速な実行が行えていることが推測される。
+
+実際にstraceで./a.outの実行を調べてみるとgetpidシステムコールは1度しか呼ばれていなかったのでこのキャッシュが有効になっていることが分かった。
+
+システムコールの実行は時間の掛かる処理であるためそのコストをなるべく避ける実装が行われていることが分かる。
+

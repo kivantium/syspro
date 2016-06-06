@@ -1,0 +1,6 @@
+Makefileはkadai-aを作るために必要
+Warningをなくすために
+- a.cでb.hをincludeするようにした
+- b.hにプロトタイプ宣言を記述した
+- mystrcmp関数の引数の型をconst charに変更した
+の変更を行った

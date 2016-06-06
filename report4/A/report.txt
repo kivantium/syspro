@@ -1,0 +1,11 @@
+gcc -o udpechoserver udpechoserver.c
+gcc -o udpechoclient udpechoclient.c
+を実行した後、別の端末で
+./udpechoserver 12345
+
+./udpechoclient 127.0.0.1 12345
+
+を実行するとクライアント側の標準入力が送信され、echoサーバーを経由して表示される。
+
+http://www.sbcr.jp/books/img/Linuxnet_03.pdf を参考にした
+

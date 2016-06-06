@@ -1,0 +1,13 @@
+gcc -o myls main.c
+のようにコンパイルし
+./myls
+として実行する。
+
+このディレクトリで(report.txtを作成する前に)実行した結果は
+-rw-rw-r-- 1 naruki naruki 2582 4月 26 21:06 main.c
+-rwxrwxr-x 1 naruki naruki 13208 4月 26 21:06 myls
+で、ls -lの
+合計 20
+-rw-rw-r-- 1 naruki naruki  2582  4月 26 21:06 main.c
+-rwxrwxr-x 1 naruki naruki 13208  4月 26 21:06 myls
+という結果と、並び順・合計ブロック数の表示を除いて一致する

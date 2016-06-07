@@ -7,6 +7,7 @@
 #include <ctype.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <time.h>
 
 #define MAXCONNECT 10
 #define NTHREAD 10
@@ -27,7 +28,7 @@ void *func(void *arg) {
     char *RequestLine;
     int rec_size;
     FILE* fp;
-    char *common_header = "Connection: close\r\n\r\n";
+    char *common_header = "Connection: close\r\n";
 
     client_len = sizeof(client);
 
@@ -86,8 +87,17 @@ void *func(void *arg) {
                 char *header = "HTTP/1.1 200 OK\n";
                 send(s, header, strlen(header), 0);
                 send(s, common_header, strlen(common_header), 0);
-                while(fgets(read, sizeof(read), fp) != NULL) {
-                    send(s, read, strlen(read), 0);
+                time_t rawtime;
+                struct tm *info;
+                char date[100];
+                time(&rawtime);
+                info = localtime(&rawtime);
+                strftime(date, 100,"Date: %c\r\n\r\n", info);
+                printf("%s\n", date);
+                send(s, date, strlen(date), 0);
+                int n;
+                while((n=fread(read, sizeof(char), BUFFSIZE, fp)) > 0) {
+                    send(s, read, n*sizeof(char), 0);
                 }
                 fclose(fp);
             }

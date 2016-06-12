@@ -1,0 +1,54 @@
+課題Dまでを実装した。
+検証するには
+gcc main.c parse.c
+./a.out
+ /usr/bin/wc -l < /proc/meminfo > out
+ /bin/cat out
+ /bin/echo 0 | /usr/bin/wc -c > out
+ /bin/cat out
+ /bin/ls >> out
+ /bin/cat out
+ /bin/cat < /proc/meminfo | /bin/cat | /bin/cat | /bin/cat > out
+ /bin/cat out
+ の出力が標準のシェルと同じになることを確認すれば良い。
+
+ /bin/cat bigfile | /usr/bin/wc
+ を実行しても停止せずに標準のシェルと同じ出力になることを確認してある
+
+課題E
+termios.hを使うことで1 byteの入力ごとに処理することができる
+例: http://stackoverflow.com/questions/4327942/non-buffering-stdin-readingより
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <termios.h>
+
+int main(int argc, char *argv[], char *envp[]) {
+  struct termios term, term_orig;
+
+  if(tcgetattr(0, &term_orig)) {
+    printf("tcgetattr failed\n");
+    exit(-1);
+  }
+
+  term = term_orig;
+
+  term.c_lflag &= ~ICANON;
+  term.c_lflag |= ECHO;
+  term.c_cc[VMIN] = 0;
+  term.c_cc[VTIME] = 0;
+
+  if (tcsetattr(0, TCSANOW, &term)) {
+    printf("tcsetattr failed\n");
+    exit(-1);
+  }
+
+  char ch;
+  while (1) {
+    if (read(0, &ch, 1) > 0) 
+      printf(" %d\n", ch);
+  }
+  return 0;
+}
+
+bashでは上記機能を実現するためにGNU readlineというライブラリを使用している。
